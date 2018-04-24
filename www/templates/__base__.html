@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    {% block meta %}<!-- block meta  -->{% endblock %}
+    <title>{% block title %} ? {% endblock %} - Awesome Python Webapp</title>
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+    <link rel="stylesheet" href="/static/css/uikit.min.css" />
+    <script type="text/javascript" src="/static/js/sticky.js"></script>
+<script src="https://vuejs.org/js/vue.js"></script>
+    <script src="/static/js/uikit.min.js"></script>
+
+    {% block beforehead %} {% endblock %}
+</head>
+<body>
+    <nav class="uk-navbar uk-navbar-attached uk-margin-bottom">
+        <div class="uk-container uk-container-center">
+            <a href="/" class="uk-navbar-brand">Awesome</a>
+            <ul class="uk-navbar-nav">
+                <li data-url="blogs"><a href="/"><i uk-icon="home"></i> 日志</a></li>
+                <li><a target="_blank" href="#"><i uk-icon="file"></i> 教程</a></li>
+                <li><a target="_blank" href="#"><i uk-icon="code"></i> 源码</a></li>
+            </ul>
+            <div class="uk-navbar-flip">
+                <ul class="uk-navbar-nav">
+                {% if user %}
+                    <li class="uk-parent" data-uk-dropdown>
+                        <a href="#0"><i uk-icon="user"></i> {{ user.name }}</a>
+                        <div class="uk-dropdown uk-dropdown-navbar">
+                            <ul class="uk-nav uk-nav-navbar">
+                                <li><a href="/signout"><i uk-icon="sign-out"></i> 登出</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                {% else %}
+                    <li><a href="/signin"><i uk-icon="sign-in"></i> 登陆</a></li>
+                    <li><a href="/register"><i uk-icon="file-edit"></i> 注册</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="uk-container uk-container-center">
+        <div class="uk-grid">
+            <!-- content -->
+            {% block content %}
+            {% endblock %}
+            <!-- // content -->
+        </div>
+    </div>
+
+    <div class="uk-margin-large-top" style="background-color:#eee; border-top:1px solid #ccc;">
+        <div class="uk-container uk-container-center uk-text-center">
+            <div class="uk-panel uk-margin-top uk-margin-bottom">
+                <p>
+                    <a target="_blank" href="#" class="uk-icon-button" uk-icon="star"></a>
+                    <a target="_blank" href="#" class="uk-icon-button" uk-icon="heart"></a>
+                    <a target="_blank" href="#" class="uk-icon-button" uk-icon="happy"></a>
+                    <a target="_blank" href="#" class="uk-icon-button" uk-icon="github"></a>
+                </p>
+                <p>Powered by <a href="#">Awesome Python Webapp</a>. Copyright &copy; 2014. [<a href="/manage/" target="_blank">Manage</a>]</p>
+                <p><a href="http://www.liaoxuefeng.com/" target="_blank">www.liaoxuefeng.com</a>. All rights reserved.</p>
+                <a target="_blank" href="#"><i class="uk-icon-html5" style="font-size:64px; color: #444;"></i></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
