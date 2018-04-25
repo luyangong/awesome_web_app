@@ -111,6 +111,7 @@ class RequestHandler(object): # this is the true handler, it calls the functions
                     return web.HTTPBadRequest()
             if request.method == 'GET':
                 qs = request.query_string
+                logging.info('GET')
                 if qs:
                     kw = {}
                     for k, v in parse.parse_qs(qs, True).items():
@@ -128,6 +129,8 @@ class RequestHandler(object): # this is the true handler, it calls the functions
                 if k in kw:
                     logging.warning('Duplicate arg name in named arg and kw args: %s' % k)
                 kw[k] = v
+        if self._has_request_arg:
+            kw['request'] = request
         if self._required_kw_args:
             for name in self._required_kw_args:
                 if not name in kw:
@@ -135,7 +138,8 @@ class RequestHandler(object): # this is the true handler, it calls the functions
                     return web.HTTPBadRequest()
             logging.info('call with args: %s' % str(kw))
         try:
-            r = await self._func(request, **kw)
+            logging.info(str(self._func))
+            r = await self._func(**kw)
             return r
         except APIError as e:
             return dict(error=e.error, data=e.data, message=e.message)
