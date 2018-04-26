@@ -3,8 +3,7 @@
 {% block title %}日志{% endblock %}
 
 {% block content %}
-
-    <div class="uk-width-medium-3-4">
+    <div class="uk-width-medium-3-6">
         {% for blog in blogs %}
             <article class="uk-article">
                 <h2><a href="/blog/{{ blog.id }}">{{ blog.name }}</a></h2>
@@ -16,7 +15,11 @@
         {% endfor %}
     </div>
 
-    <div class="uk-width-medium-1-4">
+    <div class="uk-width-medium-1-6">
+        <a href="/manage/blogs/create" class="uk-button uk-button-primary"><i class="uk-icon-plus"></i> 新日志</a>
+    </div>
+
+    <div class="uk-width-medium-2-6">
         <div class="uk-panel uk-panel-header">
             <h3 class="uk-panel-title">友情链接</h3>
             <ul class="uk-list uk-list-line">
