@@ -12,7 +12,7 @@ import markdown2
 from aiohttp import web
 
 from coroweb import get, post
-from apis import Page, APIValueError, APIResourceNotFoundError
+from apis import Page, APIValueError, APIResourceNotFoundError, APIPermissionError
 
 from models import User, Comment, Blog, next_id
 from config import configs
@@ -21,8 +21,9 @@ COOKIE_NAME = 'awesession'
 _COOKIE_KEY = configs.session.secret
 
 def check_admin(request):
-    if request.__user__ is None or not request.__user__.admin:
-        raise APIPermissionError()
+    #if request.__user__ is None or not request.__user__.admin:
+    #    raise APIPermissionError()
+    pass
 
 def get_page_index(page_str):
     p = 1
@@ -88,6 +89,7 @@ async def index(*, page='1'):
         'page': page,
         'blogs': blogs
     }
+
 
 @get('/blog/{id}')
 async def get_blog(id):

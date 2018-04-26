@@ -42,6 +42,7 @@ def init_jinja2(app, **kw):
         for name, f in filters.items():
             env.filters[name] = f
     app['__templating__'] = env
+    logging.info(str(env))
 
 @asyncio.coroutine
 def logger_factory(app, handler):
@@ -64,13 +65,14 @@ def auth_factory(app, handler):
             if user:
                 logging.info('set current user: %s' % user.email)
                 request.__user__ = user
-        if request.path.startswith('/manage/') and (request.__user__ is None or not request.__user__.admin):
-            return web.HTTPFound('/signin')
+        #if request.path.startswith('/manage/') and (request.__user__ is None or not request.__user__.admin):
+        #    return web.HTTPFound('/signin')
         return (yield from handler(request))
     return auth
 
 @asyncio.coroutine
 def data_factory(app, handler):
+    logging.info('data_factory start')
     @asyncio.coroutine
     def parse_data(request):
         if request.method == 'POST':
@@ -81,10 +83,12 @@ def data_factory(app, handler):
                 request.__data__ = yield from request.post()
                 logging.info('request form: %s' % str(request.__data__))
         return (yield from handler(request))
+    logging.info('data_factory returned')
     return parse_data
 
 @asyncio.coroutine
 def response_factory(app, handler):
+    logging.info('response_factory start')
     @asyncio.coroutine
     def response(request):
         logging.info('Response handler...')
@@ -106,6 +110,7 @@ def response_factory(app, handler):
             if template is None:
                 resp = web.Response(body=json.dumps(r, ensure_ascii=False, default=lambda o: o.__dict__).encode('utf-8'))
                 resp.content_type = 'application/json;charset=utf-8'
+                logging.info('template is None')
                 return resp
             else:
                 r['__user__'] = request.__user__
@@ -122,6 +127,7 @@ def response_factory(app, handler):
         resp = web.Response(body=str(r).encode('utf-8'))
         resp.content_type = 'text/plain;charset=utf-8'
         return resp
+    logging.info('response_factory returned')
     return response
 
 def datetime_filter(t):
@@ -141,7 +147,7 @@ def datetime_filter(t):
 def init(loop):
     yield from orm.create_pool(loop=loop, **configs.db)
     app = web.Application(loop=loop, middlewares=[
-        logger_factory, auth_factory, response_factory
+        logger_factory, data_factory, auth_factory, response_factory
     ])
     init_jinja2(app, filters=dict(datetime=datetime_filter))
     add_routes(app, 'handlers')

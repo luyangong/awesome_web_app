@@ -111,7 +111,7 @@ class RequestHandler(object): # this is the true handler, it calls the functions
                     return web.HTTPBadRequest()
             if request.method == 'GET':
                 qs = request.query_string
-                logging.info('GET')
+                logging.info('GETaaaaaaaaaaaaaaaaaaaaa')
                 if qs:
                     kw = {}
                     for k, v in parse.parse_qs(qs, True).items():
@@ -138,8 +138,8 @@ class RequestHandler(object): # this is the true handler, it calls the functions
                     return web.HTTPBadRequest()
             logging.info('call with args: %s' % str(kw))
         try:
-            logging.info(str(self._func))
             r = await self._func(**kw)
+            logging.info(str(r))
             return r
         except APIError as e:
             return dict(error=e.error, data=e.data, message=e.message)
