@@ -368,11 +368,41 @@ if (typeof(Vue)!=='undefined') {
                 location.assign('?' + $.param(r));
             }
         },
+        computed:{
+          pages: function(){
+                var pag = [], i = 1;
+                var showItem = 5;
+                  if( this.page_index < showItem ){ //如果当前的激活的项 小于要显示的条数
+                       //总页数和要显示的条数那个大就显示多少条
+                       i = Math.min(showItem, this.page_count);
+                       while(i){
+                           pag.unshift(i--);
+                       }
+                  }else{ //当前页数大于显示页数了
+                       var middle = this.page_index - Math.floor(showItem / 2 ),//从哪里开始
+                           i = showItem;
+                       if( middle >  (this.page_count - showItem)  ){
+                           middle = (this.page_count - showItem) + 1
+                       }
+                       while(i--){
+                           pag.push( middle++ );
+                       }
+                  }
+                return pag;
+          }
+        },
         template: `
                 <ul class="uk-pagination">
                 <li v-if="! has_previous" class="uk-disabled"></li>
                 <li v-if="has_previous" class="uk-pagination-previous uk-active"><a v-on:click="gotoPage(page_index-1)" href="#0"><i class="uk-icon-angle-double-left"> 上一页</i></a></li>
-                <li class="uk-active"><span v-text="page_index"></span></li>
+                <li v-if="pages[0] > 3" class='uk-active'><a v-on:click="gotoPage(1)" href="#0">1</a></li>
+                <li v-if="pages[0] > 3"><span>...</span></li>
+                <li v-for="index in pages" class='uk-active'>
+                    <a v-if="index != page_index" v-on:click="gotoPage(index)" v-text='index' href="#0"></a>
+                    <span v-text='index' v-else></span>
+                </li>
+                <li v-if="page_count - pages[pages.length-1] > 2"><span>...</span></li>
+                <li v-if="page_count - pages[pages.length-1] > 2" class='uk-active'><a v-on:click="gotoPage(page_count)" v-text='page_count' href="#0"></a></li>
                 <li v-if="! has_next" class="uk-disabled"></li>
                 <li v-if="has_next" class="uk-pagination-next uk-active"><a v-on:click="gotoPage(page_index+1)" href="#0">下一页 <i class="uk-icon-angle-double-right"></i></a></li>
                 </ul>
