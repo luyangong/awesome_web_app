@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Test users - Awesome Python Webapp</title>
+
+    <link rel="stylesheet" href="/static/css/uikit.min.css">
+    <link rel="stylesheet" href="/static/css/uikit.gradient.min.css">
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/uikit.min.js"></script>
+        <script src="/static/js/components/pagination.min.js"></script>
+
+
 </head>
 <body>
-    <h1>All users</h1>
-    {% for u in users %}
-    <p>{{ u.name }} / {{ u.email }}</p>
-    {% endfor %}
+
+    <script>
+$(document).ready(function(){
+  $("ul").click(function(){
+$("#test").on('select.uk.pagination', function(event){
+    alert('You have selected page: ' + (1));
+    console.log('Extends $form...');
+});
+});
+});
+</script>
+        <ul id='test' class="uk-pagination" data-uk-pagination="{items:10, itemsOnPage:1}">
+        </ul>
 </body>
 </html>

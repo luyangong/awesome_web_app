@@ -41,6 +41,21 @@ $(function() {
         initVM(results);
     });
 });
+/*$(document).ready(function(){
+  $("ul li").click(function(){
+      getJSON('/api/blogs', {
+        page: {{ page_index }}
+        }, function (err, results) {
+        if (err) {
+            return fatal(err);
+        }
+        alert(results.page);
+        $('[data-uk-pagination]').on('select.uk.pagination', function(event, pageIndex, paginObj){
+        alert({{ page_index }});
+        });
+      });
+  });
+});*/
 </script>
 
 {% endblock %}
@@ -94,8 +109,8 @@ $(function() {
                 </tr>
             </tbody>
         </table>
-
-        <div v-component="pagination" v-with="page"></div>
+       <!-- <div v-text="page"></div> -->
+      <my-pagination v-bind="page"> </my-pagination>
     </div>
 
 {% endblock %}

@@ -56,15 +56,14 @@ def has_named_kw_args(fn):
 def has_var_kw_arg(fn):
     params = inspect.signature(fn).parameters
     for name, param in params.items():
-        if param.kind == inspect.Parameter.KEYWORD_ONLY:
+        if param.kind == inspect.Parameter.VAR_KEYWORD:
             return True
         else:
             return False
 
 
 def has_request_arg(fn):
-    sig = inspect.signature(fn)
-    params = sig.parameters
+    params = inspect.signature(fn).parameters
     found = False
     for name, param in params.items():
         if name == 'request':
@@ -82,6 +81,7 @@ class RequestHandler(object): # this is the true handler, it calls the functions
     def __init__(self, app, fn):
         self._app = app
         self._func = fn # now it is index function.
+        # These are the handle function's arguments.
         self._has_request_arg = has_request_arg(fn)
         self._has_var_kw_arg = has_var_kw_arg(fn)
         self._has_named_kw_args = has_named_kw_args(fn)
@@ -109,9 +109,10 @@ class RequestHandler(object): # this is the true handler, it calls the functions
                 else:
                     logging.info('Unsupported Content-Type: %s' % request.content_type)
                     return web.HTTPBadRequest()
+                logging.info('request.method is POST')
             if request.method == 'GET':
                 qs = request.query_string
-                logging.info('GETaaaaaaaaaaaaaaaaaaaaa')
+                logging.info('GET')
                 if qs:
                     kw = {}
                     for k, v in parse.parse_qs(qs, True).items():

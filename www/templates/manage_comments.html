@@ -89,6 +89,7 @@ $(function() {
                 </tr>
             </tbody>
         </table>
-        <div v-component="pagination" v-with="page"></div>
+               <!-- <div v-text="page"></div> -->
+      <my-pagination v-bind="page"> </my-pagination>
     </div>
 {% endblock %}

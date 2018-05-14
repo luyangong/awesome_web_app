@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = 'Michael Liao'
+__author__ = 'Michael Liao, Yangong Lu revised'
 
 ' url handlers '
 
@@ -21,9 +21,11 @@ COOKIE_NAME = 'awesession'
 _COOKIE_KEY = configs.session.secret
 
 def check_admin(request):
-    #if request.__user__ is None or not request.__user__.admin:
-    #    raise APIPermissionError()
-    pass
+    if request.__user__ is None:
+        raise APIPermissionError('You should sign in first.')
+    if not request.__user__.admin:
+        print(request.__user__.admin)
+        raise APIPermissionError()
 
 def get_page_index(page_str):
     p = 1
@@ -108,6 +110,11 @@ async def get_blog(id):
 def register():
     return {
         '__template__': 'register.html'
+    }
+@get('/test')
+def test():
+    return {
+        '__template__': 'test.html'
     }
 
 @get('/signin')

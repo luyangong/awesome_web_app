@@ -67,7 +67,9 @@ def auth_factory(app, handler):
                 request.__user__ = user
         #if request.path.startswith('/manage/') and (request.__user__ is None or not request.__user__.admin):
         #    return web.HTTPFound('/signin')
+        logging.info('auth returned')
         return (yield from handler(request))
+    logging.info('auth_factory returned.')
     return auth
 
 @asyncio.coroutine
@@ -94,16 +96,19 @@ def response_factory(app, handler):
         logging.info('Response handler...')
         r = yield from handler(request)
         if isinstance(r, web.StreamResponse):
+            logging.info('1')
             return r
         if isinstance(r, bytes):
             resp = web.Response(body=r)
             resp.content_type = 'application/octet-stream'
+            logging.info('2')
             return resp
         if isinstance(r, str):
             if r.startswith('redirect:'):
                 return web.HTTPFound(r[9:])
             resp = web.Response(body=r.encode('utf-8'))
             resp.content_type = 'text/html;charset=utf-8'
+            logging.info('3')
             return resp
         if isinstance(r, dict):
             template = r.get('__template__')
@@ -111,21 +116,26 @@ def response_factory(app, handler):
                 resp = web.Response(body=json.dumps(r, ensure_ascii=False, default=lambda o: o.__dict__).encode('utf-8'))
                 resp.content_type = 'application/json;charset=utf-8'
                 logging.info('template is None')
+                logging.info('4')
                 return resp
             else:
                 r['__user__'] = request.__user__
                 resp = web.Response(body=app['__templating__'].get_template(template).render(**r).encode('utf-8'))
                 resp.content_type = 'text/html;charset=utf-8'
+                logging.info('5')
                 return resp
         if isinstance(r, int) and t >= 100 and t < 600:
+            logging.info('6')
             return web.Response(t)
         if isinstance(r, tuple) and len(r) == 2:
             t, m = r
             if isinstance(t, int) and t >= 100 and t < 600:
+                logging.info('7')
                 return web.Response(t, str(m))
         # default:
         resp = web.Response(body=str(r).encode('utf-8'))
         resp.content_type = 'text/plain;charset=utf-8'
+        logging.info('resp returned')
         return resp
     logging.info('response_factory returned')
     return response

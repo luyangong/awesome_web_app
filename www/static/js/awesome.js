@@ -118,11 +118,12 @@ function parseQueryString() {
     return r;
 }
 
-function gotoPage(i) {
+/* function gotoPage(i) {
     var r = parseQueryString();
     r.page = i;
     location.assign('?' + $.param(r));
 }
+*/
 
 function refresh() {
     var
@@ -357,14 +358,25 @@ if (typeof(Vue)!=='undefined') {
         }
         return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate() + ' ' + d.getHours() + ':' + d.getMinutes();
     });
-    Vue.component('pagination', {
-        template: '<ul class="uk-pagination">' +
-                '<li v-if="! has_previous" class="uk-disabled"><span><i class="uk-icon-angle-double-left"></i></span></li>' +
-                '<li v-if="has_previous"><a v-attr="onclick:\'gotoPage(\' + (page_index-1) + \')\'" href="#0"><i class="uk-icon-angle-double-left"></i></a></li>' +
-                '<li class="uk-active"><span v-text="page_index"></span></li>' +
-                '<li v-if="! has_next" class="uk-disabled"><span><i class="uk-icon-angle-double-right"></i></span></li>' +
-                '<li v-if="has_next"><a v-attr="onclick:\'gotoPage(\' + (page_index+1) + \')\'" href="#0"><i class="uk-icon-angle-double-right"></i></a></li>' +
-            '</ul>'
+    Vue.component('myPagination', {
+        props: ['item_count', 'page_size', 'page_count', 'offset', 'limit',
+        'has_previous', 'page_index', 'has_next'],
+        methods: {
+            gotoPage: function (i) {
+                var r = parseQueryString();
+                r.page = i;
+                location.assign('?' + $.param(r));
+            }
+        },
+        template: `
+                <ul class="uk-pagination">
+                <li v-if="! has_previous" class="uk-disabled"></li>
+                <li v-if="has_previous" class="uk-pagination-previous uk-active"><a v-on:click="gotoPage(page_index-1)" href="#0"><i class="uk-icon-angle-double-left"> 上一页</i></a></li>
+                <li class="uk-active"><span v-text="page_index"></span></li>
+                <li v-if="! has_next" class="uk-disabled"></li>
+                <li v-if="has_next" class="uk-pagination-next uk-active"><a v-on:click="gotoPage(page_index+1)" href="#0">下一页 <i class="uk-icon-angle-double-right"></i></a></li>
+                </ul>
+            `,
     });
 }
 
