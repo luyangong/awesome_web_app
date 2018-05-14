@@ -110,7 +110,10 @@ $(function() {
             </tbody>
         </table>
        <!-- <div v-text="page"></div> -->
-      <my-pagination v-bind="page"> </my-pagination>
-    </div>
+        <my-pagination v-bind="page"> </my-pagination>
+        <ul class="uk-grid" data-uk-grid-match>
+            <li class="uk-grid-width-1-3"><strong>条目总数：</strong><span v-text="page.item_count"></span></li>
+            <li class="uk-grid-width-1-3"><strong>页面总数：</strong><span v-text="page.page_count"></span></li>
+        </ul>
 
 {% endblock %}
