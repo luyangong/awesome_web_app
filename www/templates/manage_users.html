@@ -16,7 +16,7 @@ function initVM(data) {
         methods: {
             gotoPage: function(){
                 var r = parseQueryString();
-                var p = $("#pageNum").val();
+                var p = $("input").val();
                 if (p >= 1 && p <= this.page.page_count){
                     r.page = p;
                     location.assign('?' + $.param(r));
@@ -90,8 +90,10 @@ $(function() {
             <li><strong>条目总数：</strong><span v-text="page.item_count"></span></li>
             <li><strong>页面总数：</strong><span v-text="page.page_count"></span></li>
             <li class="uk-grid-width-1-2">
-                <input type="text" id="pageNum" placeholder="页码">
-                <button id='bt1' class="uk-width-2-5" v-on:click="gotoPage()">查询<i class="uk-icon-search"></i></button>
+                <input type="text" placeholder="页码">
+                <button class="uk-button uk-button-primary uk-width-2-5" v-on:click="gotoPage()">
+                    查询<i class="uk-icon-search"></i>
+                </button>
             </li>
         </ul>
     </div>
