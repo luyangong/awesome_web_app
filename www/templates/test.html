@@ -7,22 +7,27 @@
     <script src="/static/js/jquery.js"></script>
     <script src="/static/js/uikit.min.js"></script>
         <script src="/static/js/components/pagination.min.js"></script>
-
+    <script src="/static/js/awesome.js"></script>
 
 </head>
 <body>
 
     <script>
 $(document).ready(function(){
-  $("ul").click(function(){
-$("#test").on('select.uk.pagination', function(event){
-    alert('You have selected page: ' + (1));
-    console.log('Extends $form...');
-});
-});
+  $("#bt1").click(function(){
+    var pag = $("#pageNum").val();
+    var r = parseQueryString();
+    r.page = parseInt(pag);
+    alert(r.page);
+    location.assign('?' + $.param(r));
+  });
 });
 </script>
         <ul id='test' class="uk-pagination" data-uk-pagination="{items:10, itemsOnPage:1}">
         </ul>
+            <li class="uk-grid-width-1-2">
+                <input type="text" id="pageNum" placeholder="页码">
+                <button id='bt1' class="uk-width-2-5">查询<i class="uk-icon-search"></i></button>
+            </li>
 </body>
 </html>
