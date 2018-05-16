@@ -18,7 +18,7 @@ from models import User, Comment, Blog, next_id
 from config import configs
 
 
-#logging.disable(logging.CRITICAL)
+logging.disable(logging.CRITICAL)
 COOKIE_NAME = 'awesession'
 _COOKIE_KEY = configs.session.secret
 
