@@ -3,7 +3,7 @@ import logging; #logging.basicConfig(level=logging.INFO)
 import asyncio
 from aiohttp import web
 
-logging.disable(logging.CRITICAL)
+#logging.disable(logging.CRITICAL)
 def index(request):
     return web.Response(body='<h1>Hello, web!</h1>', content_type='text/html')
 

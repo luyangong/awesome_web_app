@@ -6,7 +6,7 @@ from aiohttp import web
 from apis import APIError
 
 
-logging.disable(logging.CRITICAL)
+#logging.disable(logging.CRITICAL)
 def get(path):
     '''Define decorator @get('/path')'''
     def decorator(func):
