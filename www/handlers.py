@@ -83,7 +83,7 @@ async def cookie2user(cookie_str):
 async def index(*, page='1'):
     page_index = get_page_index(page)
     num = await Blog.findNumber('count(id)')
-    page = Page(num)
+    page = Page(num, page_index)
     if num == 0:
         blogs = []
     else:
@@ -94,6 +94,9 @@ async def index(*, page='1'):
         'blogs': blogs
     }
 
+@get('/pages/{page}')
+async def index_other(page):
+    return (await index(page=page))
 
 @get('/blog/{id}')
 async def get_blog(id):
