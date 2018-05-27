@@ -16,7 +16,9 @@ function initVM(data) {
             gotoPage: function(){
                 var r = parseQueryString();
                 var p = $("input").val();
-                if (p >= 1 && p <= this.page.page_count){
+                if (p == this.page.page_index)
+                    alert('This is the page already.');
+                else if (p >= 1 && p <= this.page.page_count){
                     r.page = p;
                     location.assign('?' + $.param(r));
                 }else
