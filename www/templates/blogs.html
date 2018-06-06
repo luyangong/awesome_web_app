@@ -19,7 +19,7 @@
 {% block content %}
 <div class="uk-width-medium-3-6">
     {% for blog in blogs %}
-    <div class="uk-panel uk-panel-box uk-panel-box-secondary uk-panel-box-primary-hover">
+    <div class="uk-panel uk-panel-box uk-panel-box-primary-hover">
     <article class="uk-article">
         <h2><a href="/blog/{{ blog.id }}">{{ blog.name }}</a></h2>
         <p class="uk-article-meta">发表于{{ blog.created_at|datetime }}</p>
@@ -27,7 +27,7 @@
         <p><a href="/blog/{{ blog.id }}">继续阅读 <i class="uk-icon-angle-double-right"></i></a></p>
     </article>
     </div>
-    <hr class="uk-article-divider">
+    <!--<hr class="uk-article-divider">-->
     {% endfor %}
 </div>
 {% if __user__ and __user__.admin %}
