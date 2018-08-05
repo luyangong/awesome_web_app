@@ -112,18 +112,22 @@ async def get_blog(id):
     }
 
 @get('/register')
-def register():
+async def register():
     return {
         '__template__': 'register.html'
     }
 @get('/test')
-def test():
+async def test():
     return {
         '__template__': 'test.html'
     }
 
+@get('/favicon.ico')
+async def favicon():
+    return 'redirect:/static/favicon.ico'
+
 @get('/signin')
-def signin():
+async def signin():
     return {
         '__template__': 'signin.html'
     }
