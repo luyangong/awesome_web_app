@@ -321,3 +321,7 @@ async def api_delete_blog(request, *, id):
     blog = await Blog.find(id)
     await blog.remove()
     return dict(id=id)
+
+@get('/favicon.ico')
+async def favicon():
+    return 'redirect:/static/favicon.ico'
