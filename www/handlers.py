@@ -16,6 +16,7 @@ from apis import Page, APIValueError, APIResourceNotFoundError, APIPermissionErr
 
 from models import User, Comment, Blog, next_id
 from config import configs
+from multidict import MultiDict
 
 
 #logging.disable(logging.CRITICAL)
@@ -328,3 +329,33 @@ async def api_delete_blog(request, *, id):
     blog = await Blog.find(id)
     await blog.remove()
     return dict(id=id)
+
+@get('/upload/file')
+async def upload_file():
+    return {'__template__': 'upload_file.html'}
+
+routes = web.RouteTableDef()
+
+@post('/store/test')
+async def store_mp3_handler(request):
+
+    # WARNING: don't do that if you plan to receive large files!
+    data = await request.post()
+
+    mp3 = data['test']
+
+    # .filename contains the name of the file in string format.
+    filename = mp3.filename
+    print(filename)
+
+    # .file contains the actual file data that needs to be stored somewhere.
+    mp3_file = data['test'].file
+
+    content = mp3_file.read()
+    print(content)
+
+    return web.Response(body=content,
+                        headers=MultiDict(
+                            {'CONTENT-DISPOSITION': mp3_file}))
+    # return content
+# app.add_routes([web.post('/store/mp3', store_mp3_handler)])

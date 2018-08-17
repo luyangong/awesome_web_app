@@ -97,6 +97,8 @@ def response_factory(app, handler):
     def response(request):
         logging.info('Response handler...')
         r = yield from handler(request)
+        if isinstance(r, web.Response):
+            return r
         if isinstance(r, web.StreamResponse):
             # logging.info('1')
             return r
