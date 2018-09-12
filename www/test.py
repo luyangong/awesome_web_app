@@ -1,16 +1,32 @@
-import orm, asyncio, sys
-from models import User, Blog, Comment
+from celery.utils.timer2 import Schedule
+from time import time, sleep
+from celery import task
+from threading import Timer
+from celery import Celery
 
-async def test(loop):
-	await orm.create_pool(loop, user='root', password='password', database='awesome')
-	u = User(name='Test', email='test@example.com', passwd='1234567890', image='about:blank')
-	await u.save()
-	await orm.close_pool()
+def hello():
+    print("hello, world")
+
+# t = Schedule()
+# print(time())
+# x = t.call_after(3, hello)  # after 30 seconds, "hello, world" will be printed
+# sleep(5)
+#
+# @task
+# def add(x, y):
+#     return x + y
+#
+# result = add.delay(4, 4)
+# print(result)
+
+# t = Timer(3.0, hello)
+# t.start()  # after 30 seconds, "hello, world" will be printed
+
+app = Celery()
+app.conf.broker_url = 'redis://localhost:6379/0'
+app.conf.result_backend = 'redis://localhost:6379/0'
+@app.task
+def add(x, y): return x + y
 
 if __name__ == '__main__':
-	loop = asyncio.get_event_loop()
-	loop.run_until_complete(test(loop))  
-	loop.close()
-	print('Now, loop has closed, exit this program...')
-	if loop.is_closed():
-		sys.exit(0)
+    app.worker_main()
