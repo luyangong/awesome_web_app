@@ -114,7 +114,22 @@ def register():
         '__template__': 'register.html'
     }
 @get('/test')
-def test():
+async def test():
+    import threading
+    import time
+
+    def hello():
+        print('good')
+        timer = threading.Timer(2.0, hello)
+        timer.start()
+
+    timer = threading.Timer(2.0, hello)
+    timer.start()
+    # from multiprocessing import Process
+    # p = Process(target=threading.Timer, args=(2.0, [hello]))
+    # p.start()
+
+
     return {
         '__template__': 'test.html'
     }
