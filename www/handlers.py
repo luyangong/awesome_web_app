@@ -193,6 +193,15 @@ def manage_create_blog():
         'action': '/api/blogs'
     }
 
+@get('/manage/blogs/create/markdown')
+def manage_create_markdown_blog():
+    logging.info('markdown create blog')
+    return {
+        '__template__': 'markdown_test.html',
+        'id': '',
+        'action': '/api/blogs'
+    }
+
 @get('/manage/blogs/edit')
 def manage_edit_blog(*, id):
     return {
