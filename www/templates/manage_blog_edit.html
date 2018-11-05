@@ -3,7 +3,7 @@
 {% block title %}编辑日志{% endblock %}
 
 {% block beforehead %}
-
+    <script type="text/javascript" src="/static/js/showdown.min.js"></script>
 <script>
 var
     ID = '{{ id }}',
@@ -73,25 +73,29 @@ $(function () {
         <span><i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> 正在加载...</span>
     </div>
 
-    <div id="vm" class="uk-width-2-3">
+    <div id="vm" class="uk-width-4-5">
         <form v-on:submit="submit" class="uk-form uk-form-stacked">
             <div class="uk-alert uk-alert-danger uk-hidden"></div>
             <div class="uk-form-row">
                 <label class="uk-form-label">标题:</label>
                 <div class="uk-form-controls">
+                    <!--<textarea id="name" onkeyup="compile()"></textarea>-->
                     <input v-model="name" name="name" type="text" placeholder="标题" class="uk-width-1-1">
                 </div>
             </div>
             <div class="uk-form-row">
                 <label class="uk-form-label">摘要:</label>
                 <div class="uk-form-controls">
-                    <textarea v-model="summary" rows="4" name="summary" placeholder="摘要" class="uk-width-1-1" style="resize:none;"></textarea>
+                    <textarea v-model="summary" rows="2" name="summary" placeholder="摘要" class="uk-width-1-1" style="resize:none;"></textarea>
                 </div>
             </div>
             <div class="uk-form-row">
                 <label class="uk-form-label">内容:</label>
+                    <div id="result" style="height:150px" class="uk-block uk-block-muted uk-width-1-1 uk-scrollable-text">
+                    </div>
                 <div class="uk-form-controls">
-                    <textarea v-model="content" rows="16" name="content" placeholder="内容" class="uk-width-1-1" style="resize:none;"></textarea>
+                    <textarea v-model="content" rows="16" name="content" id="content" placeholder="内容"
+                              class="uk-width-1-1" style="resize:none;" onkeyup="compile()"></textarea>
                 </div>
             </div>
             <div class="uk-form-row">
@@ -101,4 +105,12 @@ $(function () {
         </form>
     </div>
 
+<script type="text/javascript">
+function compile(){
+    var text = document.getElementById("content").value;
+    var converter = new showdown.Converter();
+    var html = converter.makeHtml(text);
+    document.getElementById("result").innerHTML = html;
+}
+</script>
 {% endblock %}
