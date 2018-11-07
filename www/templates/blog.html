@@ -23,6 +23,10 @@ $(function () {
         });
     });
 });
+
+function Upload() {
+    document.getElementById("fileForm").submit();
+};
 </script>
 
 {% endblock %}
@@ -43,7 +47,10 @@ $(function () {
 
         <article class="uk-comment">
             <header class="uk-comment-header">
-                <img class="uk-comment-avatar uk-border-circle" width="50" height="50" src="{{ __user__.image }}">
+                <form id="fileForm" action="/api/user/image" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                    <input id="fileElem" type="file" name="file" accept="image/*" style="display:none" onchange="Upload()">
+                </form>
+                <img id="fileSelect" class="uk-comment-avatar uk-border-circle" width="50" height="50" src="{{ __user__.image }}">
                 <h4 class="uk-comment-title">{{ __user__.name }}</h4>
             </header>
             <div class="uk-comment-body">
@@ -102,5 +109,17 @@ $(function () {
             </ul>
         </div>
     </div>
+<script>
 
+var fileSelect = document.getElementById("fileSelect"),
+    fileElem = document.getElementById("fileElem");
+
+fileSelect.addEventListener("click", function (e) {
+  if (fileElem) {
+    fileElem.click();
+  }
+  e.preventDefault(); // prevent navigation to "#"
+}, false);
+
+</script>
 {% endblock %}

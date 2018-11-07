@@ -7,7 +7,7 @@ __author__ = 'Michael Liao, Yangong Lu revised'
 
 import re, time, json, logging, hashlib, base64, asyncio
 
-import markdown2
+import markdown2, os
 
 from aiohttp import web
 
@@ -83,7 +83,7 @@ async def cookie2user(cookie_str):
 async def index(*, page='1'):
     page_index = get_page_index(page)
     num = await Blog.findNumber('count(id)')
-    page = Page(num)
+    page = Page(num, page_index, 3) # change the items in homepage
     if num == 0:
         blogs = []
     else:
@@ -340,3 +340,27 @@ async def api_delete_blog(request, *, id):
 @get('/favicon.ico')
 async def favicon():
     return 'redirect:/static/favicon.ico'
+
+@post('/api/user/image')
+async def api_user_image(request):
+    if request.__user__ is None:
+        raise APIPermissionError('You should sign in first.')
+    else:
+        uid = request.__user__.id
+
+    data = await request.post()
+    file = data['file']
+    image_file = os.path.join(os.path.dirname(__file__), 'static', 'image', file.filename)
+    if not file.content_type.startswith('image'):
+        raise APIPermissionError('Upload an image please.')
+    with open(image_file, 'wb') as fp:
+        fp.write(file.file.read())
+
+    user = await User.find(uid)
+    user.image = '{}://{}/{}/{}'.format(request.scheme, request.host, 'static/image', file.filename)
+    await user.update()
+    blogs = await Blog.findAll('user_id="%s"' % uid)
+    for blog in blogs:
+        blog.user_image = user.image
+        await blog.update()
+    return 'redirect:%s' % request.message.headers['referer']
