@@ -18,7 +18,7 @@ from models import User, Comment, Blog, next_id
 from config import configs
 
 
-logging.disable(logging.CRITICAL)
+# logging.disable(logging.CRITICAL)
 COOKIE_NAME = 'awesession'
 _COOKIE_KEY = configs.session.secret
 
@@ -353,7 +353,7 @@ async def api_user_image(request):
     image_file = os.path.join(os.path.dirname(__file__), 'static', 'image', file.filename)
     if not file.content_type.startswith('image'):
         raise APIPermissionError('Upload an image please.')
-    with open(image_file, 'wb') as fp:
+    with open(image_file.encode('utf-8'), 'wb') as fp:
         fp.write(file.file.read())
 
     user = await User.find(uid)
