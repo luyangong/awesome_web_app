@@ -123,12 +123,12 @@ def response_factory(app, handler):
                 resp = web.Response(body=app['__templating__'].get_template(template).render(**r).encode('utf-8'))
                 resp.content_type = 'text/html;charset=utf-8'
                 return resp
-        if isinstance(r, int) and t >= 100 and t < 600:
-            return web.Response(t)
+        if isinstance(r, int) and 100 <= r < 600:
+            return web.Response(status=r)
         if isinstance(r, tuple) and len(r) == 2:
             t, m = r
             if isinstance(t, int) and t >= 100 and t < 600:
-                return web.Response(t, str(m))
+                return web.Response(status=t, text=str(m))
         # default:
         resp = web.Response(body=str(r).encode('utf-8'))
         resp.content_type = 'text/plain;charset=utf-8'

@@ -7,7 +7,7 @@ import logging
 import aiomysql
 
 logging.basicConfig(level=logging.INFO)
-logging.disable(logging.CRITICAL)
+#logging.disable(logging.CRITICAL)
 
 def log(sql, args=()):
     logging.info('SQL: %s' % sql)

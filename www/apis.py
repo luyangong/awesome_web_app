@@ -1,6 +1,6 @@
 import json, logging, inspect, functools
 
-logging.disable(logging.CRITICAL)
+#logging.disable(logging.CRITICAL)
 class Page(object):
     '''
     Page object for display pages.

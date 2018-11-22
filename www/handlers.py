@@ -94,6 +94,9 @@ async def index(*, page='1'):
         'blogs': blogs
     }
 
+@get('/pages/{page}')
+async def index_other(page):
+    return (await index(page=page))
 
 @get('/blog/{id}')
 async def get_blog(id):
@@ -364,3 +367,10 @@ async def api_user_image(request):
         blog.user_image = user.image
         await blog.update()
     return 'redirect:%s' % request.message.headers['referer']
+
+@get('/auth')
+async def check_auth(request):
+    if request.__user__ is None:
+        return 401
+    else:
+        return 200
