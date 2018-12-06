@@ -1,24 +1,6 @@
-import os, tarfile
+import os
 import re
 import shutil
-
-"""
-some code copy from https://www.cnblogs.com/liangqihui/p/9219333.html
-"""
-
-
-def make_targz(output_filename, source_dir):
-    with tarfile.open(output_filename, "w:gz") as tar:
-        tar.add(source_dir, arcname=os.path.basename(source_dir))
-
-
-def make_targz_one_by_one(output_filename, source_dir):
-    tar = tarfile.open(output_filename, "w:gz")
-    for root, dir, files in os.walk(source_dir):
-        for file in files:
-            pathfile = os.path.join(root, file)
-            tar.add(pathfile)
-    tar.close()
 
 
 def copy_file(source_dir, out_dir, regex):
@@ -29,6 +11,8 @@ def copy_file(source_dir, out_dir, regex):
     :return: None
     """
     for root, dirs, files in os.walk(source_dir):
+        if root.endswith('test'):
+            continue
         for name in files:
             match = re.search(regex, name)
             if match:
@@ -41,10 +25,12 @@ def copy_file(source_dir, out_dir, regex):
 
 
 if __name__ == '__main__':
-    dirname = os.path.dirname(__file__)
-    dirname = os.path.join(dirname, 'backage')
+    dirname1 = os.path.dirname(__file__)
+    dirname = os.path.join(dirname1, 'backage')
     print(dirname)
     os.chdir('../www')
-    regex = re.compile(r'(\.py)|(\.ico)')
+    regex = re.compile(r'\w+(?!.pyc)')
     source_path = os.path.abspath('.')
     copy_file(source_path, dirname, regex)
+    os.chdir(dirname1)
+    print(shutil.make_archive('archive', 'zip', dirname))
