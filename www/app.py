@@ -14,7 +14,7 @@ from datetime import datetime
 
 from aiohttp import web
 from jinja2 import Environment, FileSystemLoader
-
+from aiohttp_swagger import setup_swagger
 from config import configs
 
 import orm
@@ -172,6 +172,7 @@ if __name__ == '__main__':
         init_jinja2(app, filters=dict(datetime=datetime_filter))
         add_routes(app, 'handlers')
         add_static(app)
+        setup_swagger(app)
         srv = yield from loop.create_server(app.make_handler(), '127.0.0.1', 9000)
         logging.info('server started at http://127.0.0.1:9000...')
         return srv

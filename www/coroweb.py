@@ -82,6 +82,7 @@ class RequestHandler(object): # this is the true handler, it calls the functions
     def __init__(self, app, fn):
         self._app = app
         self._func = fn # now it is index function.
+        self.__doc__ = fn.__doc__
         # These are the handle function's arguments.
         self._has_request_arg = has_request_arg(fn)
         self._has_var_kw_arg = has_var_kw_arg(fn)
