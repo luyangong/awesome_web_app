@@ -319,6 +319,37 @@ async def api_create_blog(request, *, name, summary, content):
 
 @post('/api/blogs/{id}')
 async def api_update_blog(id, request, *, name, summary, content):
+    """
+    ---
+    post:
+      tags:
+      - blog
+      summary: change one blog
+      description: This can only be done by the logged in user.
+      operationId: handlers.api_update_blog
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: body
+        description: Changed blog object
+        required: true
+        schema:
+            type: object
+            properties:
+              name:
+                type: string
+              summary:
+                type: string
+              content:
+                type: string
+
+      responses:
+        "200":
+          description: successful changed
+
+
+    """
     check_admin(request)
     blog = await Blog.find(id)
     if not name or not name.strip():
