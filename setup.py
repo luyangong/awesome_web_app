@@ -7,6 +7,6 @@ setup(
     packages=['myapp'],  # 包括在安装包内的Python包
     exclude_package_data={'': ['.gitignore', '*.pyc']},
     install_requires=[  # 依赖列表
-        'aiohttp==3.1.3',
+        'aiohttp==3.7.4',
     ]
 )
